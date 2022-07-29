@@ -6,6 +6,7 @@ import {
   checkIsValidUtmValue,
   getUtmUrlPayload,
 } from "../utils/utils";
+import Storage from "store2";
 
 export default function IndexPage() {
   const [BaseUrlInput, setBaseUrlInput] = useState({
@@ -30,6 +31,15 @@ export default function IndexPage() {
   const [sources, setSources] = useState([]);
   const [mediums, setMediums] = useState([]);
   const [mediumName, setMediumName] = useState(null);
+  const [prevBaseUrls, setPrevBaseUrls] = useState(
+    Storage.get("baseUrls") || []
+  );
+  const [prevAudiences, setPrevAudiences] = useState(
+    Storage.get("audiences") || []
+  );
+  const [prevContents, setPrevContents] = useState(
+    Storage.get("contents") || []
+  );
 
   const handleBaseUrlInput = (value) => {
     setBaseUrlInput({ value, isValid: checkIsValidUrl(value) });
@@ -61,7 +71,7 @@ export default function IndexPage() {
     setMediums(sources.find((source) => source.name === sourceName).mediums);
   };
   const handleButtonClick = () => {
-    const utmUrl = getUtmUrlPayload({
+    const Payload = getUtmUrlPayload({
       baseUrl: BaseUrlInput.value,
       source: sourceName,
       medium: mediumName,
@@ -70,14 +80,40 @@ export default function IndexPage() {
       term: SearchTermInput.value,
       id: adId,
     });
-    console.log(utmUrl);
+    console.log(Payload);
+
+    // UPDATE PREV BASE URLS
+    const storedBaseUrls = Storage.get("baseUrls") || [];
+    const updatedBaseUrls = [
+      ...new Set([Payload.baseUrl, ...storedBaseUrls]),
+    ].slice(0, 20); // add new content to front of array, remove duplicates, and limit to 20
+    Storage.set("baseUrls", updatedBaseUrls);
+    setPrevBaseUrls(updatedBaseUrls);
+
+    // UPDATE PREV AUDIENCES
+    const storedAudiences = Storage.get("audiences") || [];
+    const updatedAudiences = [
+      ...new Set([Payload.campaign, ...storedAudiences]),
+    ].slice(0, 20); // add new content to front of array, remove duplicates, and limit to 20
+    Storage.set("audiences", updatedAudiences);
+    setPrevAudiences(updatedAudiences);
+
+    // UPDATE PREV CONTENTS
+    const storedContents = Storage.get("contents") || [];
+    const updatedContents = [
+      ...new Set([Payload.content, ...storedContents]),
+    ].slice(0, 20); // add new content to front of array, remove duplicates, and limit to 20
+    Storage.set("contents", updatedContents);
+    setPrevContents(updatedContents);
+
+    // TODO: Display results
   };
 
   return (
     <main className="container-fluid">
       <title>How To Name UTM Parameters</title>
       <div className="row">
-        <div className="col-6">
+        <div className="col-5">
           <h5>UTM Builder</h5>
           {/* Base URL */}
           <div className="mb-4">
@@ -110,7 +146,7 @@ export default function IndexPage() {
             <label htmlFor="audience-input" className="form-control-label mb-1">
               <span className="h6">Audience Codename&nbsp;&nbsp;</span>
               <span className="text-muted">
-                Lowercase a-z, numbers, dashes, and spaces only.
+                a-z, 0-9, dashes, and spaces only
               </span>
             </label>
             <input
@@ -128,7 +164,7 @@ export default function IndexPage() {
             <label htmlFor="content-input" className="form-control-label mb-1">
               <span className="h6">Content Description&nbsp;&nbsp;</span>
               <span className="text-muted">
-                Lowercase a-z, numbers, dashes, and spaces only.
+                a-z, 0-9, dashes, and spaces only
               </span>
             </label>
             <input
@@ -227,7 +263,7 @@ export default function IndexPage() {
               >
                 <span className="h6">Search Terms&nbsp;&nbsp;</span>
                 <span className="text-muted">
-                  Lowercase a-z, numbers, dashes, and spaces only.
+                  a-z, 0-9, dashes, and spaces only
                 </span>
               </label>
               <input
@@ -269,7 +305,7 @@ export default function IndexPage() {
               ? SearchTermInput.isValid && SearchTermInput.value !== ""
               : true) && */ <div className="d-grid">
               <button
-                className="btn btn-primary"
+                className="btn btn-success"
                 type="button"
                 onClick={() => handleButtonClick()}
               >
@@ -278,14 +314,52 @@ export default function IndexPage() {
             </div>
           }
         </div>
-        <div className="col-2">
+        <div className="col-7">
           <h5>Previous Base URLs</h5>
-        </div>
-        <div className="col-2">
-          <h5>Previous Audiences</h5>
-        </div>
-        <div className="col-2">
-          <h5>Previous Content</h5>
+          {prevBaseUrls.map((baseUrl) => (
+            <p className="text-break mb-1">
+              {baseUrl}{" "}
+              <button
+                type="button"
+                className="btn btn-sm btn-success px-2 py-0"
+                onClick={() => handleBaseUrlInput(baseUrl)}
+              >
+                Add
+              </button>
+            </p>
+          ))}
+          <div className="row">
+            <div className="col-6">
+              <h5 className="mt-4">Previous Audiences</h5>
+              {prevAudiences.map((audience) => (
+                <p className="text-break mb-1">
+                  {audience}{" "}
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-success px-2 py-0"
+                    onClick={() => handleAudienceInput(audience)}
+                  >
+                    Add
+                  </button>
+                </p>
+              ))}
+            </div>
+            <div className="col-6">
+              <h5 className="mt-4">Previous Content</h5>
+              {prevContents.map((content) => (
+                <p className="text-break mb-1">
+                  {content}{" "}
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-success px-2 py-0"
+                    onClick={() => handleContentInput(content)}
+                  >
+                    Add
+                  </button>
+                </p>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </main>
