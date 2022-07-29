@@ -7,6 +7,7 @@ import {
   getUtmUrlPayload,
 } from "../utils/utils";
 import Storage from "store2";
+import copy from "copy-to-clipboard";
 
 export default function IndexPage() {
   const [BaseUrlInput, setBaseUrlInput] = useState({
@@ -31,6 +32,7 @@ export default function IndexPage() {
   const [sources, setSources] = useState([]);
   const [mediums, setMediums] = useState([]);
   const [mediumName, setMediumName] = useState(null);
+  const [utmUrl, setUtmUrl] = useState(null);
   const [prevBaseUrls, setPrevBaseUrls] = useState(
     Storage.get("baseUrls") || []
   );
@@ -106,7 +108,9 @@ export default function IndexPage() {
     Storage.set("contents", updatedContents);
     setPrevContents(updatedContents);
 
-    // TODO: Display results
+    // SET UTM URL
+    setUtmUrl(Payload.utmUrl);
+    copy(Payload.utmUrl); // copy to clipboard
   };
 
   return (
@@ -291,8 +295,7 @@ export default function IndexPage() {
             />
           </div>
           {/* Create UTM Button */}
-          {
-            /*trafficType &&
+          {trafficType &&
             sourceName &&
             mediumName &&
             BaseUrlInput.isValid &&
@@ -303,16 +306,31 @@ export default function IndexPage() {
             ContentInput.value !== "" &&
             (mediumName === "search--p"
               ? SearchTermInput.isValid && SearchTermInput.value !== ""
-              : true) && */ <div className="d-grid">
-              <button
-                className="btn btn-success"
-                type="button"
-                onClick={() => handleButtonClick()}
+              : true) && (
+              <div className="d-grid">
+                <button
+                  className="btn btn-success"
+                  type="button"
+                  onClick={() => handleButtonClick()}
+                >
+                  Create UTM URL
+                </button>
+              </div>
+            )}
+          {/* UTM URL */}
+          {utmUrl && (
+            <>
+              <div
+                className="alert alert-success mt-4 text-break mb-2"
+                role="alert"
               >
-                Create UTM URL
-              </button>
-            </div>
-          }
+                {utmUrl}
+              </div>
+              <p className="text-success text-center fs-5">
+                Copied to your clipboard!
+              </p>
+            </>
+          )}
         </div>
         <div className="col-7">
           <h5>Previous Base URLs</h5>
