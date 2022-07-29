@@ -1,7 +1,11 @@
 import * as React from "react";
 import { useState } from "react";
 import { traffic } from "../utils/traffic";
-import { checkIsValidUrl, checkIsValidUtmValue } from "../utils/utils";
+import {
+  checkIsValidUrl,
+  checkIsValidUtmValue,
+  getUtmUrlPayload,
+} from "../utils/utils";
 
 export default function IndexPage() {
   const [BaseUrlInput, setBaseUrlInput] = useState({
@@ -30,15 +34,12 @@ export default function IndexPage() {
   const handleBaseUrlInput = (value) => {
     setBaseUrlInput({ value, isValid: checkIsValidUrl(value) });
   };
-
   const handleAudienceInput = (value) => {
     setAudienceInput({ value, isValid: checkIsValidUtmValue(value) });
   };
-
   const handleContentInput = (value) => {
     setContentInput({ value, isValid: checkIsValidUtmValue(value) });
   };
-
   const handleSearchTermInput = (value) => {
     setSearchTermInput({ value, isValid: checkIsValidUtmValue(value) });
   };
@@ -59,6 +60,18 @@ export default function IndexPage() {
     setMediumName(null); // reset medium
     setMediums(sources.find((source) => source.name === sourceName).mediums);
   };
+  const handleButtonClick = () => {
+    const utmUrl = getUtmUrlPayload({
+      baseUrl: BaseUrlInput.value,
+      source: sourceName,
+      medium: mediumName,
+      campaign: AudienceInput.value,
+      content: ContentInput.value,
+      term: SearchTermInput.value,
+      id: adId,
+    });
+    console.log(utmUrl);
+  };
 
   return (
     <main className="container-fluid">
@@ -75,6 +88,7 @@ export default function IndexPage() {
                 <a
                   href="https://channelkey.com/"
                   target="_blank"
+                  rel="noopener"
                   className="text-muted"
                 >
                   https://channelkey.com/
@@ -230,10 +244,7 @@ export default function IndexPage() {
           {/* Ad ID */}
           <div className="my-4">
             <label htmlFor="ad-id-input" className="form-control-label mb-1">
-              <span className="h6">Ad ID (Optional)&nbsp;&nbsp;</span>
-              <span className="text-muted">
-                Lowercase a-z, numbers, dashes, and spaces only.
-              </span>
+              <span className="h6">Ad ID (Optional)</span>
             </label>
             <input
               type="text"
@@ -244,7 +255,8 @@ export default function IndexPage() {
             />
           </div>
           {/* Create UTM Button */}
-          {trafficType &&
+          {
+            /*trafficType &&
             sourceName &&
             mediumName &&
             BaseUrlInput.isValid &&
@@ -255,13 +267,16 @@ export default function IndexPage() {
             ContentInput.value !== "" &&
             (mediumName === "search--p"
               ? SearchTermInput.isValid && SearchTermInput.value !== ""
-              : true) && (
-              <div className="d-grid">
-                <button className="btn btn-primary" type="button">
-                  Create UTM URL
-                </button>
-              </div>
-            )}
+              : true) && */ <div className="d-grid">
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={() => handleButtonClick()}
+              >
+                Create UTM URL
+              </button>
+            </div>
+          }
         </div>
         <div className="col-2">
           <h5>Previous Base URLs</h5>
