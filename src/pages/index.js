@@ -258,14 +258,14 @@ export default function IndexPage() {
               </div>
             ))}
           </div>
-          {/* Search Terms */}
+          {/* Search Term */}
           {mediumName === "search--p" && (
             <div className="my-4">
               <label
                 htmlFor="search-term-input"
                 className="form-control-label mb-1"
               >
-                <span className="h6">Search Terms&nbsp;&nbsp;</span>
+                <span className="h6">Search Term&nbsp;&nbsp;</span>
                 <span className="text-muted">
                   a-z, 0-9, dashes, and spaces only
                 </span>
