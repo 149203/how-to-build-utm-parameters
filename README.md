@@ -52,3 +52,11 @@
 Deploy this starter with one click on [Gatsby Cloud](https://www.gatsbyjs.com/cloud/):
 
 [<img src="https://www.gatsbyjs.com/deploynow.svg" alt="Deploy to Gatsby Cloud">](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-minimal)
+
+Notes:
+
+Removed:
+
+    "preact": "^10.10.0",
+    "preact-render-to-string": "^5.2.1",
+    "gatsby-plugin-preact": "^6.19.0",
