@@ -48,6 +48,10 @@ export const traffic = {
       mediums: ["message", "social"],
     },
     {
+      name: "multiplymii",
+      mediums: ["display", "email"],
+    },
+    {
       name: "short-term-nurture",
       mediums: ["email"],
     },
