@@ -49,7 +49,7 @@ export const traffic = {
     },
     {
       name: "multiplymii",
-      mediums: ["display", "email"],
+      mediums: ["email", "message"],
     },
     {
       name: "short-term-nurture",
