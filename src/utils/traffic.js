@@ -29,6 +29,10 @@ export const traffic = {
       mediums: ["display--p", "physical--p"],
     },
     {
+      name: "similarweb",
+      mediums: ["email--p", "social--p"],
+    },
+    {
       name: "sopro",
       mediums: ["email--p", "message--p"],
     },
@@ -54,6 +58,10 @@ export const traffic = {
     {
       name: "short-term-nurture",
       mediums: ["email"],
+    },
+    {
+      name: "similarweb",
+      mediums: ["email", "social"],
     },
   ],
 };
