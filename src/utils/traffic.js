@@ -60,6 +60,10 @@ export const traffic = {
       mediums: ["email", "social"],
     },
     {
+      name: "sellers-funding",
+      mediums: ["display"],
+    },
+    {
       name: "short-term-nurture",
       mediums: ["email"],
     },
