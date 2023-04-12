@@ -44,6 +44,10 @@ export const traffic = {
       mediums: ["message", "social"],
     },
     {
+      name: "general-nurture",
+      mediums: ["email"],
+    },
+    {
       name: "key-insider",
       mediums: ["email"],
     },
